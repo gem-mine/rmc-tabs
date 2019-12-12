@@ -1,0 +1,48 @@
+{
+  "name": "@gem-mine/rmc-tabs",
+  "version": "0.1.0",
+  "description": "React Mobile Tabs Component(mobile web)",
+  "keywords": [
+    "react",
+    "react-component",
+    "react-m-tabs",
+    "m-tabs"
+  ],
+  "files": [
+    "lib",
+    "es",
+    "assets/*.css"
+  ],
+  "license": "MIT",
+  "main": "./lib/index",
+  "module": "./es/index",
+  "config": {
+    "port": 8021
+  },
+  "scripts": {
+    "watch-tsc": "rc-tools run watch-tsc",
+    "compile": "rc-tools run compile",
+    "build": "rc-tools run build",
+    "start": "rc-tools run server",
+    "lint": "rc-tools run lint --no-js-lint"
+  },
+  "dependencies": {
+    "babel-runtime": "6.x",
+    "rc-gesture": "~0.0.18",
+    "react-sticky": "^6.0.1"
+  },
+  "devDependencies": {
+    "@types/react": "^15.6.28",
+    "@types/react-dom": "^15.5.0",
+    "@types/react-sticky": "^6.0.0",
+    "pre-commit": "1.x",
+    "rc-tools": "6.x",
+    "react": "^15.5.0",
+    "react-dom": "^15.5.0",
+    "stylelint-config-standard": "^17.0.0"
+  },
+  "typings": "./lib/index.d.ts",
+  "pre-commit": [
+    "lint"
+  ]
+}
