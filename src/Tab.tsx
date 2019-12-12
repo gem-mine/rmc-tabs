@@ -23,15 +23,16 @@ export class Tab extends React.PureComponent<TabPropsType> {
         if (len > pageSize) {
           let delta = currentIndex + 2 - pageSize
           // 保证不能偏移过头
+          if (delta < 0) {
+            delta = 0
+          }
           if (len < delta + pageSize) {
             delta = len - pageSize
           }
-          if (delta > 0) {
-            if (!vertical) {
-              const tabBarRef = getTabBarRef()
-              tabBarRef.style.left = `-${delta * rate}%`
-              tabBarRef.style.position = 'relative'
-            }
+          if (!vertical) {
+            const tabBarRef = getTabBarRef()
+            tabBarRef.style.left = `-${delta * rate}%`
+            tabBarRef.style.position = 'relative'
           }
         }
       }
