@@ -57,8 +57,8 @@ export class TabBar extends React.PureComponent<TabBarPropsType> {
     }
     const activeStyle: React.CSSProperties = {}
     const tabbar = (
-      <div className={`${cls}-wrap`}>
-        <div className={`${cls} ${cls}-${position}`} ref={this.setTabBarRef}>
+      <div className={`${cls}-wrap ${cls}-${position}`}>
+        <div className={`${cls}`} ref={this.setTabBarRef}>
           <Gesture {...this.onPan}>
             <div className={`${cls}-content`}>
               {React.Children.map(children, (child: any, i: number) => {
