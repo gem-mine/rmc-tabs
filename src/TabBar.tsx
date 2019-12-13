@@ -96,8 +96,7 @@ export class TabBar extends React.PureComponent<TabBarPropsType> {
       return (
         <Sticky>
           {({ style }) => {
-            style.zIndex = 1
-            return React.cloneElement(tabbar, { style })
+            return React.cloneElement(tabbar, (style = { ...style, zIndex: 1 }))
           }}
         </Sticky>
       )
