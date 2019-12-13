@@ -1,8 +1,7 @@
 import '@gem-mine/rmc-tabs/assets/index.less'
-import { StickyContainer, Sticky } from 'react-sticky'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Tabs } from '../src'
+import Tabs from '../src'
 const TabPane = Tabs.TabPane
 
 class BasicDemo extends React.Component<{}, any> {
