@@ -8,6 +8,7 @@ import { getIndex } from './util'
 
 class TabsStateType {
   currentIndex: number
+  changeFromState: boolean // 为了区分受控模式下，是通过外部 props 修改 还是内部 state 修改
 }
 
 export class Tabs extends React.Component<TabsPropsType, TabsStateType> {
@@ -28,15 +29,52 @@ export class Tabs extends React.Component<TabsPropsType, TabsStateType> {
     super(props)
     const { children, current } = this.props
     this.state = {
+      changeFromState: current === undefined,
       currentIndex: getIndex(children, current)
     }
   }
 
-  componentWillReceiveProps(nextProps: TabsPropsType) {
-    if (nextProps.current !== undefined) {
-      const index = getIndex(this.props.children, nextProps.current)
-      if (index !== this.state.currentIndex) {
-        this.setIndex(index)
+  // UNSAFE_componentWillReceiveProps(nextProps: TabsPropsType) {
+  //   if (nextProps.current !== undefined) {
+  //     const index = getIndex(this.props.children, nextProps.current)
+  //     if (index !== this.state.currentIndex) {
+  //       this.setIndex(index)
+  //     }
+  //   }
+  // }
+
+  static getDerivedStateFromProps(
+    nextProps: TabsPropsType,
+    prevState: TabsStateType
+  ) {
+    if (prevState.changeFromState) {
+      return {
+        changeFromState: false
+      }
+    }
+    const controlled =
+      nextProps.current !== undefined && nextProps.current !== null
+    if (controlled) {
+      const index = getIndex(nextProps.children, nextProps.current)
+      if (index !== prevState.currentIndex) {
+        return {
+          currentIndex: index,
+          changeFromState: false
+        }
+      }
+    }
+    return null
+  }
+
+  componentDidUpdate(prevProps: TabsPropsType, prevState: TabsStateType) {
+    const prevIndex = prevState.currentIndex
+    const currentIndex = this.state.currentIndex
+    if (prevIndex !== currentIndex) {
+      if (this.props.onChange) {
+        this.props.onChange(
+          this.props.children[currentIndex],
+          this.props.children[prevIndex]
+        )
       }
     }
   }
@@ -53,12 +91,10 @@ export class Tabs extends React.Component<TabsPropsType, TabsStateType> {
     if (currentIndex !== index) {
       this.setState(
         {
-          currentIndex: index
+          currentIndex: index,
+          changeFromState: true
         },
         () => {
-          if (this.props.onChange) {
-            this.props.onChange(children[index], children[currentIndex])
-          }
           if (callback) {
             callback(index)
           }
