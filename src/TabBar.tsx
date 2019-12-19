@@ -5,14 +5,11 @@ import { TabBarPropsType } from './PropsType'
 import { Tab } from './Tab'
 
 export class TabBar extends React.PureComponent<TabBarPropsType> {
-  tabBar: HTMLDivElement
+  tabBar: React.RefObject<HTMLDivElement>
 
-  setTabBarRef = (ref: HTMLDivElement) => {
-    this.tabBar = ref
-  }
-
-  getTabBarRef = () => {
-    return this.tabBar
+  constructor(props: TabBarPropsType) {
+    super(props)
+    this.tabBar = React.createRef<HTMLDivElement>()
   }
 
   onPan = (() => {
@@ -20,18 +17,22 @@ export class TabBar extends React.PureComponent<TabBarPropsType> {
 
     return {
       onPanStart: () => {
-        offset = this.tabBar.offsetLeft
+        if (this.tabBar && this.tabBar.current) {
+          offset = this.tabBar.current.offsetLeft
+        }
       },
       onPanMove: (status: IGestureStatus) => {
         if (!status.moveStatus) {
           return
         }
-        let x = offset + status.moveStatus.x
-        x = Math.max(
-          Math.min(x, 0),
-          this.tabBar.clientWidth - this.tabBar.scrollWidth
-        )
-        this.tabBar.style.left = `${x}px`
+        if (this.tabBar && this.tabBar.current) {
+          let x = offset + status.moveStatus.x
+          x = Math.max(
+            Math.min(x, 0),
+            this.tabBar.current.clientWidth - this.tabBar.current.scrollWidth
+          )
+          this.tabBar.current.style.left = `${x}px`
+        }
       },
       onPanEnd: () => {}
     }
@@ -42,23 +43,18 @@ export class TabBar extends React.PureComponent<TabBarPropsType> {
       prefixCls,
       position,
       vertical,
-      pageSize,
       currentIndex,
       tabHeight,
       children,
+      rate,
       sticky
     } = this.props
     const cls = `${prefixCls}-tab-bar`
-    let rate = 100
     let deviate = 0
-    const len = children.length
-    if (Array.isArray(children)) {
-      rate = rate / Math.min(pageSize as number, len)
-    }
     const activeStyle: React.CSSProperties = {}
     const tabbar = (
       <div className={`${cls}-wrap ${cls}-${position}`}>
-        <div className={`${cls}`} ref={this.setTabBarRef}>
+        <div className={`${cls}`} ref={this.tabBar}>
           <Gesture {...this.onPan}>
             <div className={`${cls}-content`}>
               {React.Children.map(children, (child: any, i: number) => {
@@ -81,7 +77,6 @@ export class TabBar extends React.PureComponent<TabBarPropsType> {
                     title={title}
                     rate={rate}
                     onClick={onClick}
-                    getTabBarRef={this.getTabBarRef}
                     {...this.props}
                   />
                 )
