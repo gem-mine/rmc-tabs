@@ -8,11 +8,15 @@ import { getIndex } from './util'
 
 class TabsStateType {
   currentIndex: number
+  current?: number | string
 }
 
 export class Tabs extends React.Component<TabsPropsType, TabsStateType> {
   static TabPane = TabPane
   state: TabsStateType
+  rate: number
+  vertical: boolean
+  tabBarRef: React.RefObject<TabBar>
 
   static defaultProps = {
     prefixCls: 'rmc-tabs',
@@ -26,64 +30,118 @@ export class Tabs extends React.Component<TabsPropsType, TabsStateType> {
 
   constructor(props: TabsPropsType) {
     super(props)
-    const { children, current } = this.props
+    const {
+      children,
+      position,
+      pageSize,
+      current,
+      defaultActiveKey
+    } = this.props
+    this.tabBarRef = React.createRef<TabBar>()
+
+    let rate = 100
+    if (Array.isArray(children)) {
+      rate = rate / Math.min(pageSize as number, children.length)
+    }
+    this.rate = rate
+    this.vertical = position === 'left' || position === 'right'
     this.state = {
-      currentIndex: getIndex(children, current)
+      current,
+      currentIndex: getIndex(children, current || defaultActiveKey)
     }
   }
 
-  componentWillReceiveProps(nextProps: TabsPropsType) {
-    if (nextProps.current !== undefined) {
-      const index = getIndex(this.props.children, nextProps.current)
-      if (index !== this.state.currentIndex) {
-        this.setIndex(index)
+  static getDerivedStateFromProps(
+    nextProps: TabsPropsType,
+    prevState: TabsStateType
+  ) {
+    // 处理受控 current
+    if (nextProps.current !== prevState.current) {
+      const index = getIndex(nextProps.children, nextProps.current)
+      return {
+        current: nextProps.current,
+        currentIndex: index
+      }
+    }
+    return null
+  }
+
+  componentDidUpdate(_prevProps: TabsPropsType, prevState: TabsStateType) {
+    // 处理 onChange 事件
+    const prevIndex = prevState.currentIndex
+    const currentIndex = this.state.currentIndex
+    if (prevIndex !== currentIndex) {
+      if (this.props.onChange) {
+        this.props.onChange(
+          this.props.children[currentIndex],
+          this.props.children[prevIndex],
+          currentIndex
+        )
       }
     }
   }
 
-  setIndex = (index: number, callback?: any) => {
-    const { currentIndex } = this.state
-    const { children } = this.props
-    const max = children.length - 1
-    if (index < 0) {
-      index = 0
-    } else if (index >= max) {
-      index = max
-    }
-    if (currentIndex !== index) {
-      this.setState(
-        {
-          currentIndex: index
-        },
-        () => {
-          if (this.props.onChange) {
-            this.props.onChange(children[index], children[currentIndex])
-          }
-          if (callback) {
-            callback(index)
+  gotoTab = (key: number | string) => {
+    this.setIndex(getIndex(this.props.children, key))
+  }
+
+  setIndex = (index: number) => {
+    // 只处理非受控
+    if (this.props.current === undefined) {
+      const { currentIndex } = this.state
+      const { children, pageSize } = this.props
+      const len = children.length - 1
+      index = Math.min(Math.max(0, index), len)
+      if (currentIndex !== index) {
+        // tab bar 位置处理
+        if (pageSize) {
+          if (len > pageSize) {
+            let delta = index - pageSize + 2
+            // 保证不能偏移过头
+            if (delta < 0) {
+              delta = 0
+            }
+            if (len < delta + pageSize) {
+              delta = len - pageSize + 1
+            }
+            if (!this.vertical) {
+              // @ts-ignore
+              const ref = this.tabBarRef.current.tabBar.current
+              if (ref) {
+                ref.style.left = `-${delta * this.rate}%`
+                ref.style.position = 'relative'
+              }
+            }
           }
         }
-      )
+
+        this.setState({
+          currentIndex: index
+        })
+      }
     }
   }
 
   render() {
-    const { prefixCls, position, sticky } = this.props
-    const vertical = position === 'left' || position === 'right'
+    const { prefixCls, position, sticky, onSwipe } = this.props
 
     const pane = [
       <TabBar
         {...this.props}
         currentIndex={this.state.currentIndex}
         setIndex={this.setIndex}
-        vertical={vertical}
+        vertical={this.vertical}
+        rate={this.rate}
         key="tab-bar"
+        ref={this.tabBarRef}
       />,
       <TabContent
         {...this.props}
         currentIndex={this.state.currentIndex}
         setIndex={this.setIndex}
-        vertical={vertical}
+        vertical={this.vertical}
+        rate={this.rate}
+        onSwipe={onSwipe}
         key="tab-content"
       />
     ]
@@ -94,7 +152,7 @@ export class Tabs extends React.Component<TabsPropsType, TabsStateType> {
     const tabs = (
       <div
         className={`${prefixCls} ${prefixCls}-${position}${
-          vertical ? ` ${prefixCls}-vertical` : ` ${prefixCls}-horizontal`
+          this.vertical ? ` ${prefixCls}-vertical` : ` ${prefixCls}-horizontal`
         }`}
       >
         {pane}

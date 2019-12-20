@@ -32,13 +32,13 @@
     "react-sticky": "^6.0.1"
   },
   "devDependencies": {
-    "@types/react": "^15.6.28",
-    "@types/react-dom": "^15.5.0",
+    "@types/react": "^16.9.16",
+    "@types/react-dom": "^16.9.4",
     "@types/react-sticky": "^6.0.0",
     "pre-commit": "1.x",
     "rc-tools": "6.x",
-    "react": "^15.5.0",
-    "react-dom": "^15.5.0",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
     "stylelint-config-standard": "^17.0.0"
   },
   "typings": "./lib/index.d.ts",

@@ -6,37 +6,14 @@ export class Tab extends React.PureComponent<TabPropsType> {
     const {
       index,
       children,
-      pageSize,
-      vertical,
-      rate,
-      setIndex,
-      getTabBarRef
+      setIndex
     } = this.props
-    const len = children.length
 
     const tab = children[index] as ReactElement
     if (tab.props.onClick) {
       tab.props.onClick(tab, index)
     }
-    setIndex(index, currentIndex => {
-      if (pageSize) {
-        if (len > pageSize) {
-          let delta = currentIndex + 2 - pageSize
-          // 保证不能偏移过头
-          if (delta < 0) {
-            delta = 0
-          }
-          if (len < delta + pageSize) {
-            delta = len - pageSize
-          }
-          if (!vertical) {
-            const tabBarRef = getTabBarRef()
-            tabBarRef.style.left = `-${delta * rate}%`
-            tabBarRef.style.position = 'relative'
-          }
-        }
-      }
-    })
+    setIndex(index)
   }
 
   render() {
