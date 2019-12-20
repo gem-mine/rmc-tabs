@@ -66,7 +66,7 @@ export class Tabs extends React.Component<TabsPropsType, TabsStateType> {
     return null
   }
 
-  componentDidUpdate(prevProps: TabsPropsType, prevState: TabsStateType) {
+  componentDidUpdate(_prevProps: TabsPropsType, prevState: TabsStateType) {
     // 处理 onChange 事件
     const prevIndex = prevState.currentIndex
     const currentIndex = this.state.currentIndex
