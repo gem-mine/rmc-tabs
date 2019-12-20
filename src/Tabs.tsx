@@ -123,7 +123,7 @@ export class Tabs extends React.Component<TabsPropsType, TabsStateType> {
   }
 
   render() {
-    const { prefixCls, position, sticky } = this.props
+    const { prefixCls, position, sticky, onSwipe } = this.props
 
     const pane = [
       <TabBar
@@ -141,6 +141,7 @@ export class Tabs extends React.Component<TabsPropsType, TabsStateType> {
         setIndex={this.setIndex}
         vertical={this.vertical}
         rate={this.rate}
+        onSwipe={onSwipe}
         key="tab-content"
       />
     ]

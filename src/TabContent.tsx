@@ -4,17 +4,40 @@ import Gesture, { IGestureStatus } from 'rc-gesture'
 
 export class TabContent extends React.PureComponent<TabContentPropsType> {
   handleSwipe = (status: IGestureStatus) => {
-    const { vertical, setIndex, currentIndex } = this.props
+    const { vertical, setIndex, currentIndex, children, onSwipe } = this.props
     if (vertical) {
       return
     }
     const { direction } = status
+    const event = status.srcEvent
+    let dir: string = ''
+    let nextIndex: number = 0
     if (direction === 2) {
-      // 向左
-      setIndex(currentIndex + 1)
+      dir = 'left'
+      nextIndex = currentIndex + 1
     } else if (direction === 4) {
-      // 向右
-      setIndex(currentIndex - 1)
+      dir = 'right'
+      nextIndex = currentIndex - 1
+    }
+    const edge = nextIndex < 0 || nextIndex >= children.length
+
+    const defaultAction = function() {
+      if (!edge) {
+        // 非边缘进行本身 tab 切换，并阻止事件冒泡
+        setIndex(nextIndex)
+        status.srcEvent.stopPropagation()
+      }
+    }
+    if (onSwipe) {
+      onSwipe(event, {
+        direction: dir,
+        edge,
+        currentIndex,
+        nextIndex,
+        defaultAction
+      })
+    } else {
+      defaultAction()
     }
   }
 

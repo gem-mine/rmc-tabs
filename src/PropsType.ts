@@ -1,5 +1,13 @@
 import { ReactNode } from 'react'
 
+interface SwipeData {
+  direction: string
+  edge: boolean
+  currentIndex: number
+  nextIndex: number
+  defaultAction: () => void
+}
+
 export interface TabsPropsType {
   prefixCls?: string
   /** tab bar 的位置，默认 top。当 vertical 时可设置 left 或 right */
@@ -24,6 +32,7 @@ export interface TabsPropsType {
     prevTab: TabPanePropsType,
     index: number
   ) => void
+  onSwipe?: (event: Event, data: SwipeData) => void
   children: Array<TabPanePropsType>
 }
 
