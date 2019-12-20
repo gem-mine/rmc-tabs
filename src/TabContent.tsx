@@ -19,25 +19,27 @@ export class TabContent extends React.PureComponent<TabContentPropsType> {
       dir = 'right'
       nextIndex = currentIndex - 1
     }
-    const edge = nextIndex < 0 || nextIndex >= children.length
+    if (dir) {
+      const edge = nextIndex < 0 || nextIndex >= children.length
 
-    const defaultAction = function() {
-      if (!edge) {
-        // 非边缘进行本身 tab 切换，并阻止事件冒泡
-        setIndex(nextIndex)
-        status.srcEvent.stopPropagation()
+      const defaultAction = function() {
+        if (!edge) {
+          // 非边缘进行本身 tab 切换，并阻止事件冒泡
+          setIndex(nextIndex)
+          status.srcEvent.stopPropagation()
+        }
       }
-    }
-    if (onSwipe) {
-      onSwipe(event, {
-        direction: dir,
-        edge,
-        currentIndex,
-        nextIndex,
-        defaultAction
-      })
-    } else {
-      defaultAction()
+      if (onSwipe) {
+        onSwipe(event, {
+          direction: dir,
+          edge,
+          currentIndex,
+          nextIndex,
+          defaultAction
+        })
+      } else {
+        defaultAction()
+      }
     }
   }
 

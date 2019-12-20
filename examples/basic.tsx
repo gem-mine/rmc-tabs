@@ -160,18 +160,61 @@ class BasicDemo extends React.Component<{}, any> {
               </div>
             </TabPane>
             <TabPane title="second">
-              <div style={{ height: 500 }}>second</div>
+              <p> 春眠不觉晓</p>
+              <p> 处处闻啼鸟</p>
+              <p> 夜来风雨声</p>
+              <p> 花落知多少</p>
+              <p> 春眠不觉晓</p>
+              <p> 处处闻啼鸟</p>
+              <p> 夜来风雨声</p>
+              <p> 花落知多少</p>
+              <p> 春眠不觉晓</p>
+              <p> 处处闻啼鸟</p>
+              <p> 夜来风雨声</p>
+              <p> 花落知多少</p>
+              <p> 春眠不觉晓</p>
+              <p> 处处闻啼鸟</p>
+              <p> 夜来风雨声</p>
+              <p> 花落知多少</p>
+              <p> 春眠不觉晓</p>
+              <p> 处处闻啼鸟</p>
+              <p> 夜来风雨声</p>
+              <p> 春眠不觉晓</p>
+              <p> 处处闻啼鸟</p>
+              <p> 夜来风雨声</p>
+              <p> 花落知多少</p>
             </TabPane>
             <TabPane title="third">
-              <div style={{ height: 500 }}>third</div>
+              <p> 千山鸟飞绝</p>
+              <p> 万径人踪灭</p>
+              <p> 孤舟蓑笠翁</p>
+              <p> 独钓寒江雪</p>
+              <p> 千山鸟飞绝</p>
+              <p> 万径人踪灭</p>
+              <p> 孤舟蓑笠翁</p>
+              <p> 独钓寒江雪</p>
+              <p> 千山鸟飞绝</p>
+              <p> 万径人踪灭</p>
+              <p> 孤舟蓑笠翁</p>
+              <p> 独钓寒江雪</p>
+              <p> 千山鸟飞绝</p>
+              <p> 万径人踪灭</p>
+              <p> 孤舟蓑笠翁</p>
+              <p> 独钓寒江雪</p>
+              <p> 千山鸟飞绝</p>
+              <p> 万径人踪灭</p>
+              <p> 孤舟蓑笠翁</p>
+              <p> 独钓寒江雪</p>
+              <p> 千山鸟飞绝</p>
+              <p> 万径人踪灭</p>
+              <p> 孤舟蓑笠翁</p>
+              <p> 独钓寒江雪</p>
             </TabPane>
           </Tabs>
         </div>
 
         <div>
-          <h2>
-            嵌套 tabs，子级 tabs swipe 到 第一个/最后 可以切换上级 tabs
-          </h2>
+          <h2>嵌套 tabs，子级 tabs swipe 到 第一个/最后 可以切换上级 tabs</h2>
           <div>
             <Tabs>
               <TabPane title="外层1">
