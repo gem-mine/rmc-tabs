@@ -4,7 +4,7 @@ import { TabsPropsType } from './PropsType'
 import { TabPane } from './TabPane'
 import { TabBar } from './TabBar'
 import { TabContent } from './TabContent'
-import { getIndex } from './util'
+import { getIndex, getOffset } from './util'
 
 class TabsStateType {
   currentIndex: number
@@ -16,7 +16,10 @@ export class Tabs extends React.Component<TabsPropsType, TabsStateType> {
   state: TabsStateType
   rate: number
   vertical: boolean
+  initScrollTop: number
+  scrollTop: Array<number | undefined>
   tabBarRef: React.RefObject<TabBar>
+  tabsRef: React.RefObject<HTMLDivElement>
 
   static defaultProps = {
     prefixCls: 'rmc-tabs',
@@ -38,6 +41,8 @@ export class Tabs extends React.Component<TabsPropsType, TabsStateType> {
       defaultActiveKey
     } = this.props
     this.tabBarRef = React.createRef<TabBar>()
+    this.tabsRef = React.createRef<HTMLDivElement>()
+    this.scrollTop = []
 
     let rate = 100
     if (Array.isArray(children)) {
@@ -48,6 +53,16 @@ export class Tabs extends React.Component<TabsPropsType, TabsStateType> {
     this.state = {
       current,
       currentIndex: getIndex(children, current || defaultActiveKey)
+    }
+  }
+
+  componentDidMount() {
+    if (this.props.sticky) {
+      const div = this.tabsRef.current
+      if (div) {
+        const offset = getOffset(div)
+        this.initScrollTop = offset.top
+      }
     }
   }
 
@@ -66,11 +81,23 @@ export class Tabs extends React.Component<TabsPropsType, TabsStateType> {
     return null
   }
 
-  componentDidUpdate(_prevProps: TabsPropsType, prevState: TabsStateType) {
+  componentDidUpdate(prevProps: TabsPropsType, prevState: TabsStateType) {
     // 处理 onChange 事件
     const prevIndex = prevState.currentIndex
     const currentIndex = this.state.currentIndex
     if (prevIndex !== currentIndex) {
+      if (prevProps.sticky) {
+        const scrollingElement = document.scrollingElement || document.body
+        const scrollTop = scrollingElement.scrollTop
+        if (scrollTop >= this.initScrollTop) {
+          const currentScrollTop = this.scrollTop[currentIndex]
+          scrollingElement.scrollTop =
+            currentScrollTop || this.initScrollTop
+          this.scrollTop[prevIndex] = scrollTop
+        } else {
+          this.scrollTop = this.scrollTop.map(() => 0)
+        }
+      }
       if (this.props.onChange) {
         this.props.onChange(
           this.props.children[currentIndex],
@@ -154,6 +181,7 @@ export class Tabs extends React.Component<TabsPropsType, TabsStateType> {
         className={`${prefixCls} ${prefixCls}-${position}${
           this.vertical ? ` ${prefixCls}-vertical` : ` ${prefixCls}-horizontal`
         }`}
+        ref={this.tabsRef}
       >
         {pane}
       </div>

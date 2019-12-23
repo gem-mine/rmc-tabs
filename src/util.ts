@@ -11,3 +11,19 @@ export function getIndex(children: any, key: string | number | undefined) {
   })
   return currentIndex
 }
+
+export function getOffset(target: HTMLElement): { top: number; left: number } {
+  let top = 0
+  let left = 0
+
+  while (target.offsetParent) {
+    top += target.offsetTop
+    left += target.offsetLeft
+    target = target.offsetParent as HTMLElement
+  }
+
+  return {
+    top: top,
+    left: left
+  }
+}
