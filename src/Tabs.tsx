@@ -87,10 +87,11 @@ export class Tabs extends React.Component<TabsPropsType, TabsStateType> {
     const currentIndex = this.state.currentIndex
     if (prevIndex !== currentIndex) {
       if (prevProps.sticky) {
-        const scrollTop = document.documentElement.scrollTop
+        const scrollingElement = document.scrollingElement || document.body
+        const scrollTop = scrollingElement.scrollTop
         if (scrollTop >= this.initScrollTop) {
           const currentScrollTop = this.scrollTop[currentIndex]
-          document.documentElement.scrollTop =
+          scrollingElement.scrollTop =
             currentScrollTop || this.initScrollTop
           this.scrollTop[prevIndex] = scrollTop
         } else {
