@@ -4,8 +4,11 @@ import Gesture, { IGestureStatus } from 'rc-gesture'
 
 export class TabContent extends React.PureComponent<TabContentPropsType> {
   handleSwipe = (status: IGestureStatus) => {
-    const { vertical, setIndex, currentIndex, children, onSwipe } = this.props
+    const { vertical, setIndex, currentIndex, children, onSwipe, swipeable } = this.props
     if (vertical) {
+      return
+    }
+    if (!swipeable) {
       return
     }
     const { direction } = status
