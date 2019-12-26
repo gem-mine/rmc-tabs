@@ -25,7 +25,7 @@ export class Tabs extends React.Component<TabsPropsType, TabsStateType> {
     prefixCls: 'rmc-tabs',
     position: 'top',
     animated: true,
-    swipeable: false,
+    swipeable: true,
     tabHeight: 32,
     pageSize: 5,
     sticky: false
