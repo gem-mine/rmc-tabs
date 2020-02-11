@@ -4,6 +4,61 @@ import ReactDOM from 'react-dom'
 import Tabs from '../src'
 const TabPane = Tabs.TabPane
 
+class Inner extends React.Component<any, any> {
+  state = {
+    now: Date.now()
+  }
+
+  componentDidMount() {
+    console.log('mounted', this.props.data)
+  }
+
+  handleClick = () => {
+    const n = Date.now()
+    this.setState({
+      now: n
+    })
+  }
+
+  render() {
+    console.log('render', this.props.data)
+    return (
+      <div>
+        <p onClick={this.handleClick}>点击更新：{this.state.now}</p>
+        <p>hello, {this.props.data}</p>
+        <p>床前明月光</p>
+        <p>疑是地上霜</p>
+        <p>举头望明月</p>
+        <p>低头思故乡</p>
+        <p>床前明月光2</p>
+        <p>疑是地上霜</p>
+        <p>举头望明月</p>
+        <p>低头思故乡</p>
+        <p>床前明月光3</p>
+        <p>疑是地上霜</p>
+        <p>举头望明月</p>
+        <p>低头思故乡</p>
+        <p>床前明月光4</p>
+        <p>疑是地上霜</p>
+        <p>举头望明月</p>
+        <p>低头思故乡</p>
+        <p>床前明月光5</p>
+        <p>疑是地上霜</p>
+        <p>举头望明月</p>
+        <p>低头思故乡</p>
+        <p>床前明月光6</p>
+        <p>疑是地上霜</p>
+        <p>举头望明月</p>
+        <p>低头思故乡</p>
+        <p>床前明月光7</p>
+        <p>疑是地上霜</p>
+        <p>举头望明月</p>
+        <p>低头思故乡</p>
+      </div>
+    )
+  }
+}
+
 class BasicDemo extends React.Component<{}, any> {
   constructor(props: any) {
     super(props)
@@ -288,6 +343,20 @@ class BasicDemo extends React.Component<{}, any> {
                 <p> 白云生处有人家</p>
                 <p> 停车坐爱枫林晚</p>
                 <p> 霜叶红于二月花</p>
+              </TabPane>
+            </Tabs>
+          </div>
+
+          <div>
+            <Tabs sticky>
+              <TabPane title="first">
+                <Inner data="xxx" />
+              </TabPane>
+              <TabPane title="second">
+                <Inner data="yyy" />
+              </TabPane>
+              <TabPane title="third">
+                <Inner data="zzz" />
               </TabPane>
             </Tabs>
           </div>

@@ -2,9 +2,27 @@ import React from 'react'
 import { TabContentPropsType } from './PropsType'
 import Gesture, { IGestureStatus } from 'rc-gesture'
 
-export class TabContent extends React.PureComponent<TabContentPropsType> {
+interface State {
+  cache: Array<any>
+}
+
+export class TabContent extends React.PureComponent<
+  TabContentPropsType,
+  State
+> {
+  state: State = {
+    cache: []
+  }
+
   handleSwipe = (status: IGestureStatus) => {
-    const { vertical, setIndex, currentIndex, children, onSwipe, swipeable } = this.props
+    const {
+      vertical,
+      setIndex,
+      currentIndex,
+      children,
+      onSwipe,
+      swipeable
+    } = this.props
     if (vertical) {
       return
     }
@@ -63,12 +81,14 @@ export class TabContent extends React.PureComponent<TabContentPropsType> {
       <Gesture onSwipe={this.handleSwipe}>
         <div className={wrapCls} style={style}>
           {React.Children.map(children, (child: any, index) => {
-            const activeCls = index === currentIndex ? 'active' : 'inactive'
-            return (
-              <div className={`${cls} ${cls}-${activeCls}`}>
-                {child.props.children}
-              </div>
-            )
+            const active = index === currentIndex
+            const activeCls = active ? 'active' : 'inactive'
+            let content: any = this.state.cache[index]
+            if (!content && active) {
+              content = child.props.children
+              this.state.cache[index] = content
+            }
+            return <div className={`${cls} ${cls}-${activeCls}`}>{content}</div>
           })}
         </div>
       </Gesture>
