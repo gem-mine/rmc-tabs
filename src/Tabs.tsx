@@ -7,7 +7,7 @@ import { TabContent } from './TabContent'
 import { getIndex, getOffset } from './util'
 
 class TabsStateType {
-  currentIndex: number
+  currentIndex!: number
   current?: number | string
 }
 
@@ -50,6 +50,7 @@ export class Tabs extends React.Component<TabsPropsType, TabsStateType> {
     }
     this.rate = rate
     this.vertical = position === 'left' || position === 'right'
+    this.initScrollTop = 0
     this.state = {
       current,
       currentIndex: getIndex(children, current || defaultActiveKey)
