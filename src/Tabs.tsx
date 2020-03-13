@@ -86,6 +86,7 @@ export class Tabs extends React.Component<TabsPropsType, TabsStateType> {
     // 处理 onChange 事件
     const prevIndex = prevState.currentIndex
     const currentIndex = this.state.currentIndex
+    const { pageSize, children } = this.props
     if (prevIndex !== currentIndex) {
       if (prevProps.sticky) {
         const scrollingElement = document.scrollingElement || document.body
@@ -97,6 +98,28 @@ export class Tabs extends React.Component<TabsPropsType, TabsStateType> {
           this.scrollTop[prevIndex] = scrollTop
         } else {
           this.scrollTop = this.scrollTop.map(() => 0)
+        }
+      }
+      // tab bar 位置处理
+      if (pageSize) {
+        const len = children.length - 1
+        if (len >= pageSize) {
+          let delta = currentIndex - pageSize + 2
+          // 保证不能偏移过头
+          if (delta < 0) {
+            delta = 0
+          }
+          if (len < delta + pageSize) {
+            delta = len - pageSize + 1
+          }
+          if (!this.vertical) {
+            // @ts-ignore
+            const ref = this.tabBarRef.current.tabBar.current
+            if (ref) {
+              ref.style.left = `-${delta * this.rate}%`
+              ref.style.position = 'relative'
+            }
+          }
         }
       }
       if (this.props.onChange) {
@@ -117,32 +140,10 @@ export class Tabs extends React.Component<TabsPropsType, TabsStateType> {
     // 只处理非受控
     if (this.props.current === undefined) {
       const { currentIndex } = this.state
-      const { children, pageSize } = this.props
+      const { children } = this.props
       const len = children.length - 1
       index = Math.min(Math.max(0, index), len)
       if (currentIndex !== index) {
-        // tab bar 位置处理
-        if (pageSize) {
-          if (len > pageSize) {
-            let delta = index - pageSize + 2
-            // 保证不能偏移过头
-            if (delta < 0) {
-              delta = 0
-            }
-            if (len < delta + pageSize) {
-              delta = len - pageSize + 1
-            }
-            if (!this.vertical) {
-              // @ts-ignore
-              const ref = this.tabBarRef.current.tabBar.current
-              if (ref) {
-                ref.style.left = `-${delta * this.rate}%`
-                ref.style.position = 'relative'
-              }
-            }
-          }
-        }
-
         this.setState({
           currentIndex: index
         })

@@ -156,15 +156,16 @@ class BasicDemo extends React.Component<{}, any> {
           </button>
           <button
             onClick={() => {
-              this.setState({ current: 2 })
+              this.setState({ current: 3 })
             }}
           >
-            切换到第 3 个 tab
+            切换到第 4 个 tab
           </button>
           <Tabs current={this.state.current}>
             <TabPane title="first">first tab content</TabPane>
             <TabPane title="second">second tab content</TabPane>
             <TabPane title="third">third tab content</TabPane>
+            <TabPane title="fourth">fourth tab content</TabPane>
           </Tabs>
         </div>
 
