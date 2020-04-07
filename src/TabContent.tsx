@@ -65,7 +65,7 @@ export class TabContent extends React.PureComponent<
   }
 
   render() {
-    const { prefixCls, currentIndex, vertical, animated, children } = this.props
+    const { prefixCls, currentIndex, vertical, animated, preRender, children } = this.props
     const cls = `${prefixCls}-content`
     const style = {
       transform: vertical
@@ -83,10 +83,15 @@ export class TabContent extends React.PureComponent<
           {React.Children.map(children, (child: any, index) => {
             const active = index === currentIndex
             const activeCls = active ? 'active' : 'inactive'
-            let content: any = this.state.cache[index]
-            if (!content && active) {
+            let content: any
+            if (!preRender) {
+              content = this.state.cache[index]
+              if (!content && active) {
+                content = child.props.children
+                this.state.cache[index] = content
+              }
+            } else {
               content = child.props.children
-              this.state.cache[index] = content
             }
             return <div className={`${cls} ${cls}-${activeCls}`}>{content}</div>
           })}
