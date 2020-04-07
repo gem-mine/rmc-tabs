@@ -34,6 +34,7 @@ export interface TabsPropsType {
   ) => void
   onSwipe?: (event: Event, data: SwipeData) => void
   children: Array<TabPanePropsType>
+  preRender?: boolean
 }
 
 export interface TabPanePropsType {

@@ -28,7 +28,8 @@ export class Tabs extends React.Component<TabsPropsType, TabsStateType> {
     swipeable: true,
     tabHeight: 32,
     pageSize: 5,
-    sticky: false
+    sticky: false,
+    preRender: false
   }
 
   constructor(props: TabsPropsType) {
