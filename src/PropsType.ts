@@ -34,7 +34,9 @@ export interface TabsPropsType {
   ) => void
   onSwipe?: (event: Event, data: SwipeData) => void
   children: Array<TabPanePropsType>
-  preRender?: boolean
+  preRender?: boolean,
+  /** rtl适配 */
+  direction?: 'ltr' | 'rtl'
 }
 
 export interface TabPanePropsType {

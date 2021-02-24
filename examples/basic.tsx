@@ -169,6 +169,22 @@ class BasicDemo extends React.Component<{}, any> {
           </Tabs>
         </div>
 
+        <div dir="rtl">
+          <h2>rtl</h2>
+          <button
+            onClick={() => {
+              this.tabs.gotoTab(2)
+            }}
+          >
+            切换到第 3 个 tab
+          </button>
+          <Tabs ref={ref => (this.tabs = ref)} direction="rtl">
+            <TabPane title="first">first tab content</TabPane>
+            <TabPane title="second">second tab content</TabPane>
+            <TabPane title="third">third tab content</TabPane>
+          </Tabs>
+        </div>
+
         <div>
           <h2>横向 tab 很多</h2>
           <Tabs pageSize={4}>

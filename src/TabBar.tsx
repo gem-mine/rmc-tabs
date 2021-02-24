@@ -47,7 +47,8 @@ export class TabBar extends React.PureComponent<TabBarPropsType> {
       tabHeight,
       children,
       rate,
-      sticky
+      sticky,
+      direction
     } = this.props
     const cls = `${prefixCls}-tab-bar`
     let deviate = 0
@@ -66,7 +67,11 @@ export class TabBar extends React.PureComponent<TabBarPropsType> {
                     activeStyle.top = i * (tabHeight as number)
                   } else {
                     activeStyle.width = `${rate}%`
-                    activeStyle.left = `${deviate}%`
+                    if (direction === 'rtl') {
+                      activeStyle.right = `${deviate}%`
+                    } else {
+                      activeStyle.left = `${deviate}%`
+                    }
                   }
                 }
                 return (
@@ -75,7 +80,6 @@ export class TabBar extends React.PureComponent<TabBarPropsType> {
                     index={i}
                     active={i === currentIndex}
                     title={title}
-                    rate={rate}
                     onClick={onClick}
                     {...this.props}
                   />
