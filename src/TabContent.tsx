@@ -21,7 +21,8 @@ export class TabContent extends React.PureComponent<
       currentIndex,
       children,
       onSwipe,
-      swipeable
+      swipeable,
+      direction: htmlDir
     } = this.props
     if (vertical) {
       return
@@ -35,10 +36,10 @@ export class TabContent extends React.PureComponent<
     let nextIndex: number = 0
     if (direction === 2) {
       dir = 'left'
-      nextIndex = currentIndex + 1
+      nextIndex = htmlDir === 'rtl' ? currentIndex - 1 : currentIndex + 1
     } else if (direction === 4) {
       dir = 'right'
-      nextIndex = currentIndex - 1
+      nextIndex = htmlDir === 'rtl' ? currentIndex + 1 : currentIndex - 1
     }
     if (dir) {
       const edge = nextIndex < 0 || nextIndex >= children.length
@@ -65,12 +66,13 @@ export class TabContent extends React.PureComponent<
   }
 
   render() {
-    const { prefixCls, currentIndex, vertical, animated, preRender, children } = this.props
+    const { prefixCls, currentIndex, vertical, animated, preRender, children, direction: htmlDir } = this.props
     const cls = `${prefixCls}-content`
+    const rtlTranslate3d = htmlDir === 'rtl' ? 100 * currentIndex : -100 * currentIndex
     const style = {
       transform: vertical
         ? `translate3d(0px, -${100 * currentIndex}%, 1px)`
-        : `translate3d(-${100 * currentIndex}%, 0px, 1px)`
+        : `translate3d(${rtlTranslate3d}%, 0px, 1px)`
     }
     let wrapCls = `${cls}-wrap`
     if (animated !== false) {
