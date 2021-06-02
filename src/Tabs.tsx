@@ -45,11 +45,7 @@ export class Tabs extends React.Component<TabsPropsType, TabsStateType> {
     this.tabsRef = React.createRef<HTMLDivElement>()
     this.scrollTop = []
 
-    let rate = 100
-    if (Array.isArray(children)) {
-      rate = rate / Math.min(pageSize as number, children.length)
-    }
-    this.rate = rate
+    this.rate = this.calculateRate(pageSize, children)
     this.vertical = position === 'left' || position === 'right'
     this.initScrollTop = 0
     this.state = {
@@ -88,6 +84,7 @@ export class Tabs extends React.Component<TabsPropsType, TabsStateType> {
     const prevIndex = prevState.currentIndex
     const currentIndex = this.state.currentIndex
     const { pageSize, children } = this.props
+    this.rate = this.calculateRate(pageSize, children)
     if (prevIndex !== currentIndex) {
       if (prevProps.sticky) {
         const scrollingElement = document.scrollingElement || document.body
@@ -150,6 +147,14 @@ export class Tabs extends React.Component<TabsPropsType, TabsStateType> {
         })
       }
     }
+  }
+
+  calculateRate = (pageSize: number | undefined, children: React.ReactNode[]) => {
+    let rate = 100
+    if (Array.isArray(children) && pageSize) {
+      rate = rate / Math.min(pageSize, children.length)
+    }
+    return rate
   }
 
   render() {
